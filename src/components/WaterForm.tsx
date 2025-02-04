@@ -54,7 +54,19 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
     }
 
     setLoading(true);
-    const data = Object.fromEntries(formData.entries());
+    const rawData = Object.fromEntries(formData.entries());
+
+    // Transform the data to match Apps Script field names
+    const transformedData = {
+      type,
+      name: rawData.name,
+      phone: rawData.phone,
+      email: rawData.email,
+      quantity: rawData.quantity,
+      date: rawData.deliveryDate,
+      address: rawData.location,
+      pincode: rawData.pinCode
+    };
 
     try {
       const response = await fetch("https://script.google.com/macros/s/AKfycbybAobvGrRb6bkH7XBNATDVO2h6fXfYcpugXRXnopAe7dMLNU0IiclQgW51b3gXoVdSlg/exec", {
@@ -62,10 +74,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          type,
-          ...data,
-        }),
+        body: JSON.stringify(transformedData),
       });
 
       if (!response.ok) throw new Error("Submission failed");
@@ -78,6 +87,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
       e.currentTarget.reset();
       setErrors({});
     } catch (error) {
+      console.error('Form submission error:', error);
       toast({
         title: "Error",
         description: "Failed to submit form. Please try again.",
