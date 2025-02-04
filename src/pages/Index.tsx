@@ -7,17 +7,17 @@ const Index = () => {
 
   return (
     <div className="min-h-screen relative overflow-hidden">
-      {/* New background image layer */}
+      {/* Background image layer with reduced opacity */}
       <div 
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat blur-sm"
         style={{
           backgroundImage: "url('/lovable-uploads/a80cc99e-7626-449b-9e43-809aaf3ff598.png')",
-          opacity: 0.8
+          opacity: 0.6
         }}
       />
       
-      {/* Existing water pattern overlay with reduced opacity */}
-      <div className="absolute inset-0 z-1 bg-primary/80 bg-water-pattern" />
+      {/* Water pattern overlay with animation */}
+      <div className="absolute inset-0 z-1 bg-primary/80 bg-water-pattern animate-float" />
       
       {/* Animated water waves */}
       <div className="absolute inset-0 z-2">
