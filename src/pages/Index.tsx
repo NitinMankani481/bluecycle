@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { Link } from "react-router-dom";
 import UserTypeSelector from "@/components/UserTypeSelector";
 import WaterForm from "@/components/WaterForm";
 
@@ -41,6 +42,12 @@ const Index = () => {
             Connect with trusted buyers and sellers of treated water. Our platform makes
             water trading simple, efficient, and sustainable.
           </p>
+          <Link 
+            to="/about"
+            className="inline-block text-white hover:text-primary-light transition-colors underline"
+          >
+            Learn more about us →
+          </Link>
         </div>
 
         <div className="max-w-4xl mx-auto backdrop-blur-lg bg-primary/20 p-8 rounded-2xl border border-primary-light/20">
