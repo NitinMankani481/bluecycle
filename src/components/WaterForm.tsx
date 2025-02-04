@@ -61,10 +61,9 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
       type,
       name: rawData.name,
       phone: rawData.phone,
-      email: rawData.email,
+      email: rawData.email || "",
       societyname: type === "seller" ? rawData.societyName : "",
       quantity: rawData.quantity,
-      date: rawData.deliveryDate,
       address: rawData.location,
       pincode: rawData.pinCode
     };
