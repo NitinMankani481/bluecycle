@@ -3,7 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useToast } from "@/components/ui/use-toast";
+import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft } from "lucide-react";
 
 interface WaterFormProps {
@@ -69,7 +69,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
     };
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbzJkvI57RBhg87xDDWM8nfRH0qHtdir4wAZAFx50hWjV0YPb1MLYEKGHehqgkuioQY8ig/exec", {
+      await fetch("https://script.google.com/macros/s/AKfycbzJkvI57RBhg87xDDWM8nfRH0qHtdir4wAZAFx50hWjV0YPb1MLYEKGHehqgkuioQY8ig/exec", {
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -78,6 +78,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
         body: JSON.stringify(transformedData),
       });
 
+      // Since we're using no-cors mode, we'll consider it a success if we get here
       toast({
         title: "Success!",
         description: "Your information has been submitted successfully.",
