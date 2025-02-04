@@ -63,14 +63,19 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
       name: rawData.name,
       phone: rawData.phone,
       email: rawData.email,
+      societyname: type === "seller" ? rawData.societyName : "",
       quantity: rawData.quantity,
       date: rawData.deliveryDate,
       address: rawData.location,
       pincode: rawData.pinCode
     };
 
+    const apiUrl = type === "seller" 
+      ? "https://script.google.com/macros/s/AKfycbzh-YogQamRf9A1qCf_e7-Og0HQ0hS2PwSSQ52jhunWydg6uSmFAxHANmRB1QRv2Biu1A/exec"
+      : "https://script.google.com/macros/s/AKfycbzJkvI57RBhg87xDDWM8nfRH0qHtdir4wAZAFx50hWjV0YPb1MLYEKGHehqgkuioQY8ig/exec";
+
     try {
-      await fetch("https://script.google.com/macros/s/AKfycbzJkvI57RBhg87xDDWM8nfRH0qHtdir4wAZAFx50hWjV0YPb1MLYEKGHehqgkuioQY8ig/exec", {
+      await fetch(apiUrl, {
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -240,6 +245,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
             {loading ? "Submitting..." : "Submit"}
           </Button>
         </div>
+
       </form>
     </Card>
   );
