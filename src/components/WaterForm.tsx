@@ -3,8 +3,8 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/components/ui/use-toast";
+import { ArrowLeft } from "lucide-react";
 
 interface WaterFormProps {
   type: "buyer" | "seller";
@@ -18,11 +18,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
 
   const validateForm = (formData: FormData): boolean => {
     const newErrors: Record<string, string> = {};
-    const requiredFields = ['quantity', 'location', 'pinCode', 'phone'];
-    
-    if (type === 'buyer') {
-      requiredFields.push('frequency', 'startDate', 'endDate');
-    }
+    const requiredFields = ['name', 'phone', 'quantity', 'location', 'pinCode'];
 
     requiredFields.forEach(field => {
       if (!formData.get(field)) {
@@ -61,7 +57,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbwYFE_6UNJ8P5pF5xiPWvuXvyXNdVWqcHJ7ZXbQvRjqJVxuHVxPr_7xQfQGXXjGUbSI/exec", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -95,107 +91,31 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
   return (
     <Card className="bg-transparent backdrop-blur-sm border-white/10">
       <form onSubmit={handleSubmit} className="space-y-6 p-6">
-        <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-center text-primary-light">
+        <div className="flex items-center mb-4">
+          <Button
+            type="button"
+            variant="ghost"
+            onClick={onBack}
+            className="text-white hover:text-primary-light p-0 mr-2"
+          >
+            <ArrowLeft className="h-6 w-6" />
+          </Button>
+          <h2 className="text-2xl font-bold text-primary-light">
             {type === "buyer" ? "Water Purchase Request" : "Water Supply Details"}
           </h2>
-          <p className="text-gray-400 text-center">
-            Please fill in your details below
-          </p>
         </div>
 
-        {type === "buyer" ? (
-          <>
-            <div className="space-y-2">
-              <Label htmlFor="quantity" className="text-gray-200">Quantity Needed (Liters)*</Label>
-              <Input
-                id="quantity"
-                name="quantity"
-                type="number"
-                min="1"
-                placeholder="Enter quantity in liters"
-                className={`bg-white/5 border-white/10 text-white ${errors.quantity ? 'border-red-500' : ''}`}
-              />
-              {errors.quantity && <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>}
-            </div>
-
-            <div className="space-y-2">
-              <Label htmlFor="frequency" className="text-gray-200">Frequency*</Label>
-              <Select name="frequency">
-                <SelectTrigger className={`bg-white/5 border-white/10 text-white ${errors.frequency ? 'border-red-500' : ''}`}>
-                  <SelectValue placeholder="Select frequency" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="daily">Daily</SelectItem>
-                  <SelectItem value="weekly">Weekly</SelectItem>
-                  <SelectItem value="monthly">Monthly</SelectItem>
-                  <SelectItem value="one-time">One-Time</SelectItem>
-                </SelectContent>
-              </Select>
-              {errors.frequency && <p className="text-red-500 text-sm mt-1">{errors.frequency}</p>}
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-              <div className="space-y-2">
-                <Label htmlFor="startDate" className="text-gray-200">Start Date*</Label>
-                <Input 
-                  id="startDate" 
-                  name="startDate" 
-                  type="date" 
-                  className={`bg-white/5 border-white/10 text-white ${errors.startDate ? 'border-red-500' : ''}`}
-                />
-                {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate}</p>}
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="endDate" className="text-gray-200">End Date*</Label>
-                <Input 
-                  id="endDate" 
-                  name="endDate" 
-                  type="date" 
-                  className={`bg-white/5 border-white/10 text-white ${errors.endDate ? 'border-red-500' : ''}`}
-                />
-                {errors.endDate && <p className="text-red-500 text-sm mt-1">{errors.endDate}</p>}
-              </div>
-            </div>
-          </>
-        ) : (
-          <div className="space-y-2">
-            <Label htmlFor="quantityAvailable" className="text-gray-200">Quantity Available (Liters)*</Label>
-            <Input
-              id="quantityAvailable"
-              name="quantity"
-              type="number"
-              min="1"
-              placeholder="Enter available quantity in liters"
-              className={`bg-white/5 border-white/10 text-white ${errors.quantity ? 'border-red-500' : ''}`}
-            />
-            {errors.quantity && <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>}
-          </div>
-        )}
-
         <div className="space-y-2">
-          <Label htmlFor="location" className="text-gray-200">
-            {type === "buyer" ? "Delivery Address*" : "Society Name*"}
+          <Label htmlFor="name" className="text-gray-200">
+            {type === "buyer" ? "Buyer Name*" : "Seller Name*"}
           </Label>
           <Input
-            id="location"
-            name="location"
-            placeholder={type === "buyer" ? "Enter your delivery address" : "Enter your society name"}
-            className={`bg-white/5 border-white/10 text-white ${errors.location ? 'border-red-500' : ''}`}
+            id="name"
+            name="name"
+            placeholder="Enter your name"
+            className={`bg-white/5 border-white/10 text-white ${errors.name ? 'border-red-500' : ''}`}
           />
-          {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
-        </div>
-
-        <div className="space-y-2">
-          <Label htmlFor="pinCode" className="text-gray-200">PIN Code*</Label>
-          <Input
-            id="pinCode"
-            name="pinCode"
-            pattern="[0-9]{6}"
-            placeholder="Enter 6-digit PIN code"
-            className={`bg-white/5 border-white/10 text-white ${errors.pinCode ? 'border-red-500' : ''}`}
-          />
-          {errors.pinCode && <p className="text-red-500 text-sm mt-1">{errors.pinCode}</p>}
+          {errors.name && <p className="text-red-500 text-sm mt-1">{errors.name}</p>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -223,15 +143,84 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
           </div>
         </div>
 
-        <div className="flex justify-between pt-4">
-          <Button 
-            type="button" 
-            variant="secondary" 
-            onClick={onBack}
-            className="bg-white/10 hover:bg-white/20 text-white border-0"
-          >
-            Back
-          </Button>
+        {type === "buyer" ? (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="quantity" className="text-gray-200">Quantity Needed (Liters)*</Label>
+              <Input
+                id="quantity"
+                name="quantity"
+                type="number"
+                min="1"
+                placeholder="Enter quantity in liters"
+                className={`bg-white/5 border-white/10 text-white ${errors.quantity ? 'border-red-500' : ''}`}
+              />
+              {errors.quantity && <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="deliveryDate" className="text-gray-200">Delivery Date*</Label>
+              <Input 
+                id="deliveryDate" 
+                name="deliveryDate" 
+                type="date" 
+                className={`bg-white/5 border-white/10 text-white ${errors.deliveryDate ? 'border-red-500' : ''}`}
+              />
+              {errors.deliveryDate && <p className="text-red-500 text-sm mt-1">{errors.deliveryDate}</p>}
+            </div>
+          </>
+        ) : (
+          <>
+            <div className="space-y-2">
+              <Label htmlFor="societyName" className="text-gray-200">Society Name*</Label>
+              <Input
+                id="societyName"
+                name="societyName"
+                placeholder="Enter society name"
+                className={`bg-white/5 border-white/10 text-white ${errors.societyName ? 'border-red-500' : ''}`}
+              />
+              {errors.societyName && <p className="text-red-500 text-sm mt-1">{errors.societyName}</p>}
+            </div>
+
+            <div className="space-y-2">
+              <Label htmlFor="quantity" className="text-gray-200">Quantity Available (Liters)*</Label>
+              <Input
+                id="quantity"
+                name="quantity"
+                type="number"
+                min="1"
+                placeholder="Enter available quantity in liters"
+                className={`bg-white/5 border-white/10 text-white ${errors.quantity ? 'border-red-500' : ''}`}
+              />
+              {errors.quantity && <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>}
+            </div>
+          </>
+        )}
+
+        <div className="space-y-2">
+          <Label htmlFor="location" className="text-gray-200">Delivery Address*</Label>
+          <Input
+            id="location"
+            name="location"
+            placeholder="Enter delivery address"
+            className={`bg-white/5 border-white/10 text-white ${errors.location ? 'border-red-500' : ''}`}
+          />
+          {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
+        </div>
+
+        <div className="space-y-2">
+          <Label htmlFor="pinCode" className="text-gray-200">PIN Code*</Label>
+          <Input
+            id="pinCode"
+            name="pinCode"
+            pattern="[0-9]{6}"
+            placeholder="Enter 6-digit PIN code"
+            className={`bg-white/5 border-white/10 text-white ${errors.pinCode ? 'border-red-500' : ''}`}
+          />
+          {errors.pinCode && <p className="text-red-500 text-sm mt-1">{errors.pinCode}</p>}
+        </div>
+
+        <div className="flex justify-end pt-4">
           <Button 
             type="submit" 
             disabled={loading}
