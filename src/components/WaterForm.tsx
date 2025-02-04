@@ -69,7 +69,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
     };
 
     const apiUrl = type === "seller" 
-      ? "https://script.google.com/macros/s/AKfycbzh-YogQamRf9A1qCf_e7-Og0HQ0hS2PwSSQ52jhunWydg6uSmFAxHANmRB1QRv2Biu1A/exec"
+      ? "https://script.google.com/macros/s/AKfycbxEi8rUjpLxd5O30DJRJwUoyJviCoeU7QvfcU_S5Nuoed1tP0NNy6Iqp4ui6xJ8c2qLIw/exec"
       : "https://script.google.com/macros/s/AKfycbzJkvI57RBhg87xDDWM8nfRH0qHtdir4wAZAFx50hWjV0YPb1MLYEKGHehqgkuioQY8ig/exec";
 
     try {
@@ -82,8 +82,6 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
         body: JSON.stringify(transformedData),
       });
 
-      // Since we're using no-cors mode, we need to handle success differently
-      // no-cors mode will always return status 0 and type 'opaque'
       if (response.type === 'opaque') {
         toast({
           title: "Success!",
