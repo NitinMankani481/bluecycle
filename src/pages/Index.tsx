@@ -6,9 +6,21 @@ const Index = () => {
   const [userType, setUserType] = useState<"buyer" | "seller" | null>(null);
 
   return (
-    <div className="min-h-screen bg-[#1B4D3E] bg-water-pattern relative overflow-hidden">
+    <div className="min-h-screen relative overflow-hidden">
+      {/* New background image layer */}
+      <div 
+        className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat blur-sm"
+        style={{
+          backgroundImage: "url('/lovable-uploads/a80cc99e-7626-449b-9e43-809aaf3ff598.png')",
+          opacity: 0.8
+        }}
+      />
+      
+      {/* Existing water pattern overlay with reduced opacity */}
+      <div className="absolute inset-0 z-1 bg-primary/80 bg-water-pattern" />
+      
       {/* Animated water waves */}
-      <div className="absolute inset-0 z-0">
+      <div className="absolute inset-0 z-2">
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/5 to-primary/20 animate-wave" />
         <div className="absolute bottom-0 left-0 right-0 h-64 bg-gradient-to-b from-primary/5 to-primary/20 animate-wave [animation-delay:7.5s]" />
       </div>
