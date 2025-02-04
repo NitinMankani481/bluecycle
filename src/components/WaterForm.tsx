@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -15,6 +15,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<Record<string, string>>({});
+  const formRef = useRef<HTMLFormElement>(null);
 
   const validateForm = (formData: FormData): boolean => {
     const newErrors: Record<string, string> = {};
@@ -84,7 +85,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
         description: "Your information has been submitted successfully.",
       });
 
-      e.currentTarget.reset();
+      formRef.current?.reset();
       setErrors({});
     } catch (error) {
       console.error('Form submission error:', error);
@@ -100,7 +101,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
 
   return (
     <Card className="bg-transparent backdrop-blur-sm border-white/10">
-      <form onSubmit={handleSubmit} className="space-y-6 p-6">
+      <form ref={formRef} onSubmit={handleSubmit} className="space-y-6 p-6">
         <div className="flex items-center mb-4">
           <Button
             type="button"
