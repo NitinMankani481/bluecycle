@@ -57,7 +57,6 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
     setLoading(true);
     const rawData = Object.fromEntries(formData.entries());
 
-    // Transform the data to match Apps Script field names
     const transformedData = {
       type,
       name: rawData.name,
@@ -75,7 +74,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
       : "https://script.google.com/macros/s/AKfycbzJkvI57RBhg87xDDWM8nfRH0qHtdir4wAZAFx50hWjV0YPb1MLYEKGHehqgkuioQY8ig/exec";
 
     try {
-      await fetch(apiUrl, {
+      const response = await fetch(apiUrl, {
         method: "POST",
         mode: "no-cors",
         headers: {
@@ -84,14 +83,19 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
         body: JSON.stringify(transformedData),
       });
 
-      // Since we're using no-cors mode, we'll consider it a success if we get here
-      toast({
-        title: "Success!",
-        description: "Your request has been submitted. Our team will contact you shortly.",
-      });
+      // Since we're using no-cors mode, we need to handle success differently
+      // no-cors mode will always return status 0 and type 'opaque'
+      if (response.type === 'opaque') {
+        toast({
+          title: "Success!",
+          description: "Your request has been submitted. Our team will contact you shortly.",
+        });
 
-      formRef.current?.reset();
-      setErrors({});
+        formRef.current?.reset();
+        setErrors({});
+      } else {
+        throw new Error('Form submission failed');
+      }
     } catch (error) {
       console.error('Form submission error:', error);
       toast({
