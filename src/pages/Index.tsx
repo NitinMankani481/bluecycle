@@ -13,7 +13,7 @@ const Index = () => {
         className="absolute inset-0 z-0 bg-cover bg-center bg-no-repeat blur-sm"
         style={{
           backgroundImage: "url('/lovable-uploads/f4df978e-43be-41d6-b957-e85a214188fc.png')",
-          opacity: 0.6
+          opacity: 0.4
         }}
       />
       
@@ -28,13 +28,6 @@ const Index = () => {
       
       <div className="container relative z-10 py-12">
         <div className="text-center mb-12 space-y-4">
-          <div className="inline-block">
-            <img
-              src="https://images.unsplash.com/photo-1581091226825-a6a2a5aee158?w=400&h=300&fit=crop"
-              alt="Water Trading"
-              className="w-32 h-32 object-cover rounded-full border-4 border-primary-light mb-6 mx-auto"
-            />
-          </div>
           <h1 className="text-4xl font-bold text-white">
             BlueCycle Marketplace
           </h1>
