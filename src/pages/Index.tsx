@@ -1,11 +1,28 @@
-// Update this page (the content is just a fallback if you fail to update the page)
+import { useState } from "react";
+import UserTypeSelector from "@/components/UserTypeSelector";
+import WaterForm from "@/components/WaterForm";
 
 const Index = () => {
+  const [userType, setUserType] = useState<"buyer" | "seller" | null>(null);
+
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center">
-        <h1 className="text-4xl font-bold mb-4">Welcome to Your Blank App</h1>
-        <p className="text-xl text-gray-600">Start building your amazing project here!</p>
+    <div className="min-h-screen bg-gradient-to-b from-secondary to-white py-12">
+      <div className="container">
+        <div className="text-center mb-12">
+          <h1 className="text-4xl font-bold text-primary-dark mb-4">
+            Water Trading Marketplace
+          </h1>
+          <p className="text-gray-600 max-w-2xl mx-auto">
+            Connect with trusted buyers and sellers of treated water. Whether you need
+            water or have it to supply, we make the process simple and efficient.
+          </p>
+        </div>
+
+        {!userType ? (
+          <UserTypeSelector onSelect={setUserType} />
+        ) : (
+          <WaterForm type={userType} onBack={() => setUserType(null)} />
+        )}
       </div>
     </div>
   );
