@@ -12,18 +12,22 @@ const UserTypeSelector = ({ onSelect }: UserTypeSelectorProps) => {
       <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer animate-fadeIn" onClick={() => onSelect("buyer")}>
         <div className="flex flex-col items-center space-y-4">
           <ShoppingCartIcon className="w-16 h-16 text-primary" />
-          <h3 className="text-2xl font-semibold">I want to buy water</h3>
-          <p className="text-center text-gray-600">Looking to purchase treated water for your needs?</p>
-          <Button className="w-full bg-white/10 hover:bg-white/20 text-white border-0">Continue as Buyer</Button>
+          <h3 className="text-2xl font-semibold text-white">I want to buy water</h3>
+          <p className="text-center text-gray-300">Looking to purchase treated water for your needs?</p>
+          <div className="flex items-center justify-center w-full">
+            <Button variant="secondary" className="w-full bg-white/20 hover:bg-white/30 text-white">Continue as Buyer</Button>
+          </div>
         </div>
       </Card>
 
       <Card className="p-6 hover:shadow-lg transition-shadow cursor-pointer animate-fadeIn" onClick={() => onSelect("seller")}>
         <div className="flex flex-col items-center space-y-4">
           <DropletIcon className="w-16 h-16 text-primary" />
-          <h3 className="text-2xl font-semibold">I want to sell water</h3>
-          <p className="text-center text-gray-600">Have treated water to supply?</p>
-          <Button className="w-full bg-white/10 hover:bg-white/20 text-white border-0">Continue as Seller</Button>
+          <h3 className="text-2xl font-semibold text-white">I want to sell water</h3>
+          <p className="text-center text-gray-300">Have treated water to supply?</p>
+          <div className="flex items-center justify-center w-full">
+            <Button variant="secondary" className="w-full bg-white/20 hover:bg-white/30 text-white">Continue as Seller</Button>
+          </div>
         </div>
       </Card>
     </div>
