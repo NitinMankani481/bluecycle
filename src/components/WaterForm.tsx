@@ -57,7 +57,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
     const data = Object.fromEntries(formData.entries());
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbwYFE_6UNJ8P5pF5xiPWvuXvyXNdVWqcHJ7ZXbQvRjqJVxuHVxPr_7xQfQGXXjGUbSI/exec", {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbybAobvGrRb6bkH7XBNATDVO2h6fXfYcpugXRXnopAe7dMLNU0IiclQgW51b3gXoVdSlg/exec", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
