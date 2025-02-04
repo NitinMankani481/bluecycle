@@ -69,15 +69,14 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
     };
 
     try {
-      const response = await fetch("https://script.google.com/macros/s/AKfycbybAobvGrRb6bkH7XBNATDVO2h6fXfYcpugXRXnopAe7dMLNU0IiclQgW51b3gXoVdSlg/exec", {
+      const response = await fetch("https://script.google.com/macros/s/AKfycbzJkvI57RBhg87xDDWM8nfRH0qHtdir4wAZAFx50hWjV0YPb1MLYEKGHehqgkuioQY8ig/exec", {
         method: "POST",
+        mode: "no-cors",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify(transformedData),
       });
-
-      if (!response.ok) throw new Error("Submission failed");
 
       toast({
         title: "Success!",
