@@ -226,16 +226,16 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
         <div className="flex justify-between pt-4">
           <Button 
             type="button" 
-            variant="outline" 
+            variant="secondary" 
             onClick={onBack}
-            className="border-white/10 text-white hover:bg-white/10"
+            className="bg-white/10 hover:bg-white/20 text-white border-0"
           >
             Back
           </Button>
           <Button 
             type="submit" 
             disabled={loading}
-            className="bg-primary hover:bg-primary-dark text-white"
+            className="bg-primary hover:bg-primary/80 text-white"
           >
             {loading ? "Submitting..." : "Submit"}
           </Button>
