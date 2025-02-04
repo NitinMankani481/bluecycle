@@ -82,7 +82,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
       // Since we're using no-cors mode, we'll consider it a success if we get here
       toast({
         title: "Success!",
-        description: "Your information has been submitted successfully.",
+        description: "Your request has been submitted. Our team will contact you shortly.",
       });
 
       formRef.current?.reset();
