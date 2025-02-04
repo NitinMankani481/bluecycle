@@ -14,16 +14,53 @@ interface WaterFormProps {
 const WaterForm = ({ type, onBack }: WaterFormProps) => {
   const { toast } = useToast();
   const [loading, setLoading] = useState(false);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validateForm = (formData: FormData): boolean => {
+    const newErrors: Record<string, string> = {};
+    const requiredFields = ['quantity', 'location', 'pinCode', 'phone'];
+    
+    if (type === 'buyer') {
+      requiredFields.push('frequency', 'startDate', 'endDate');
+    }
+
+    requiredFields.forEach(field => {
+      if (!formData.get(field)) {
+        newErrors[field] = `${field.charAt(0).toUpperCase() + field.slice(1).replace(/([A-Z])/g, ' $1')} is required`;
+      }
+    });
+
+    const phone = formData.get('phone') as string;
+    if (phone && !/^\d{10}$/.test(phone)) {
+      newErrors.phone = 'Please enter a valid 10-digit phone number';
+    }
+
+    const pinCode = formData.get('pinCode') as string;
+    if (pinCode && !/^\d{6}$/.test(pinCode)) {
+      newErrors.pinCode = 'Please enter a valid 6-digit PIN code';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-
     const formData = new FormData(e.currentTarget);
+    
+    if (!validateForm(formData)) {
+      toast({
+        title: "Validation Error",
+        description: "Please fill in all required fields correctly.",
+        variant: "destructive",
+      });
+      return;
+    }
+
+    setLoading(true);
     const data = Object.fromEntries(formData.entries());
 
     try {
-      // Replace this URL with your Google Apps Script Web App URL
       const response = await fetch("YOUR_GOOGLE_APPS_SCRIPT_URL", {
         method: "POST",
         headers: {
@@ -43,6 +80,7 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
       });
 
       e.currentTarget.reset();
+      setErrors({});
     } catch (error) {
       toast({
         title: "Error",
@@ -55,13 +93,13 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
   };
 
   return (
-    <Card className="max-w-2xl mx-auto p-6 animate-fadeIn">
-      <form onSubmit={handleSubmit} className="space-y-6">
+    <Card className="bg-transparent backdrop-blur-sm border-white/10">
+      <form onSubmit={handleSubmit} className="space-y-6 p-6">
         <div className="space-y-2">
-          <h2 className="text-2xl font-bold text-center">
+          <h2 className="text-2xl font-bold text-center text-primary-light">
             {type === "buyer" ? "Water Purchase Request" : "Water Supply Details"}
           </h2>
-          <p className="text-gray-600 text-center">
+          <p className="text-gray-400 text-center">
             Please fill in your details below
           </p>
         </div>
@@ -69,21 +107,22 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
         {type === "buyer" ? (
           <>
             <div className="space-y-2">
-              <Label htmlFor="quantity">Quantity Needed (Liters)</Label>
+              <Label htmlFor="quantity" className="text-gray-200">Quantity Needed (Liters)*</Label>
               <Input
                 id="quantity"
                 name="quantity"
                 type="number"
-                required
                 min="1"
                 placeholder="Enter quantity in liters"
+                className={`bg-white/5 border-white/10 text-white ${errors.quantity ? 'border-red-500' : ''}`}
               />
+              {errors.quantity && <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>}
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="frequency">Frequency</Label>
-              <Select name="frequency" required>
-                <SelectTrigger>
+              <Label htmlFor="frequency" className="text-gray-200">Frequency*</Label>
+              <Select name="frequency">
+                <SelectTrigger className={`bg-white/5 border-white/10 text-white ${errors.frequency ? 'border-red-500' : ''}`}>
                   <SelectValue placeholder="Select frequency" />
                 </SelectTrigger>
                 <SelectContent>
@@ -93,89 +132,111 @@ const WaterForm = ({ type, onBack }: WaterFormProps) => {
                   <SelectItem value="one-time">One-Time</SelectItem>
                 </SelectContent>
               </Select>
+              {errors.frequency && <p className="text-red-500 text-sm mt-1">{errors.frequency}</p>}
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="startDate">Start Date</Label>
-                <Input id="startDate" name="startDate" type="date" required />
+                <Label htmlFor="startDate" className="text-gray-200">Start Date*</Label>
+                <Input 
+                  id="startDate" 
+                  name="startDate" 
+                  type="date" 
+                  className={`bg-white/5 border-white/10 text-white ${errors.startDate ? 'border-red-500' : ''}`}
+                />
+                {errors.startDate && <p className="text-red-500 text-sm mt-1">{errors.startDate}</p>}
               </div>
               <div className="space-y-2">
-                <Label htmlFor="endDate">End Date</Label>
-                <Input id="endDate" name="endDate" type="date" required />
+                <Label htmlFor="endDate" className="text-gray-200">End Date*</Label>
+                <Input 
+                  id="endDate" 
+                  name="endDate" 
+                  type="date" 
+                  className={`bg-white/5 border-white/10 text-white ${errors.endDate ? 'border-red-500' : ''}`}
+                />
+                {errors.endDate && <p className="text-red-500 text-sm mt-1">{errors.endDate}</p>}
               </div>
             </div>
           </>
         ) : (
           <div className="space-y-2">
-            <Label htmlFor="quantityAvailable">Quantity Available (Liters)</Label>
+            <Label htmlFor="quantityAvailable" className="text-gray-200">Quantity Available (Liters)*</Label>
             <Input
               id="quantityAvailable"
-              name="quantityAvailable"
+              name="quantity"
               type="number"
-              required
               min="1"
               placeholder="Enter available quantity in liters"
+              className={`bg-white/5 border-white/10 text-white ${errors.quantity ? 'border-red-500' : ''}`}
             />
+            {errors.quantity && <p className="text-red-500 text-sm mt-1">{errors.quantity}</p>}
           </div>
         )}
 
         <div className="space-y-2">
-          <Label htmlFor="location">
-            {type === "buyer" ? "Delivery Address" : "Society Name"}
+          <Label htmlFor="location" className="text-gray-200">
+            {type === "buyer" ? "Delivery Address*" : "Society Name*"}
           </Label>
           <Input
             id="location"
             name="location"
-            required
-            placeholder={
-              type === "buyer"
-                ? "Enter your delivery address"
-                : "Enter your society name"
-            }
+            placeholder={type === "buyer" ? "Enter your delivery address" : "Enter your society name"}
+            className={`bg-white/5 border-white/10 text-white ${errors.location ? 'border-red-500' : ''}`}
           />
+          {errors.location && <p className="text-red-500 text-sm mt-1">{errors.location}</p>}
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="pinCode">PIN Code</Label>
+          <Label htmlFor="pinCode" className="text-gray-200">PIN Code*</Label>
           <Input
             id="pinCode"
             name="pinCode"
-            required
             pattern="[0-9]{6}"
             placeholder="Enter 6-digit PIN code"
+            className={`bg-white/5 border-white/10 text-white ${errors.pinCode ? 'border-red-500' : ''}`}
           />
+          {errors.pinCode && <p className="text-red-500 text-sm mt-1">{errors.pinCode}</p>}
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="phone">Phone Number</Label>
+            <Label htmlFor="phone" className="text-gray-200">Phone Number*</Label>
             <Input
               id="phone"
               name="phone"
               type="tel"
-              required
               pattern="[0-9]{10}"
               placeholder="Enter 10-digit phone number"
+              className={`bg-white/5 border-white/10 text-white ${errors.phone ? 'border-red-500' : ''}`}
             />
+            {errors.phone && <p className="text-red-500 text-sm mt-1">{errors.phone}</p>}
           </div>
           <div className="space-y-2">
-            <Label htmlFor="email">Email</Label>
+            <Label htmlFor="email" className="text-gray-200">Email</Label>
             <Input
               id="email"
               name="email"
               type="email"
-              required
               placeholder="Enter your email"
+              className="bg-white/5 border-white/10 text-white"
             />
           </div>
         </div>
 
         <div className="flex justify-between pt-4">
-          <Button type="button" variant="outline" onClick={onBack}>
+          <Button 
+            type="button" 
+            variant="outline" 
+            onClick={onBack}
+            className="border-white/10 text-white hover:bg-white/10"
+          >
             Back
           </Button>
-          <Button type="submit" disabled={loading}>
+          <Button 
+            type="submit" 
+            disabled={loading}
+            className="bg-primary hover:bg-primary-dark text-white"
+          >
             {loading ? "Submitting..." : "Submit"}
           </Button>
         </div>
