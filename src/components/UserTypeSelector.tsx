@@ -14,7 +14,7 @@ const UserTypeSelector = ({ onSelect }: UserTypeSelectorProps) => {
           <ShoppingCartIcon className="w-16 h-16 text-primary" />
           <h3 className="text-2xl font-semibold">I want to buy water</h3>
           <p className="text-center text-gray-600">Looking to purchase treated water for your needs?</p>
-          <Button className="w-full" variant="outline">Continue as Buyer</Button>
+          <Button className="w-full bg-white/10 hover:bg-white/20 text-white border-0">Continue as Buyer</Button>
         </div>
       </Card>
 
@@ -23,7 +23,7 @@ const UserTypeSelector = ({ onSelect }: UserTypeSelectorProps) => {
           <DropletIcon className="w-16 h-16 text-primary" />
           <h3 className="text-2xl font-semibold">I want to sell water</h3>
           <p className="text-center text-gray-600">Have treated water to supply?</p>
-          <Button className="w-full" variant="outline">Continue as Seller</Button>
+          <Button className="w-full bg-white/10 hover:bg-white/20 text-white border-0">Continue as Seller</Button>
         </div>
       </Card>
     </div>
